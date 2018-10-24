@@ -8,6 +8,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import SearchP from '@/components/SearchP'
 import Settlement from '@/components/Settlement'
+import OrderDetail from '@/components/OrderDetail'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,12 @@ export const constantRouterMap = [
     path: '/settlement',
     name: 'Settlement',
     component: Settlement
+  },
+
+  {
+    path: '/orderDetail',
+    name: 'OrderDetail',
+    component: OrderDetail
   },
   {
     path: '/home',

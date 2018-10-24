@@ -66,7 +66,7 @@ export const getTables = () => instance.get('/getTables')
 // 下单
 export const submitOrder = params => instance.post('/submitOrder', params)
 // 获取订单列表
-export const getOrder = () => instance.get('/getOrder')
+export const getOrder = params => instance.post('/getOrder', params)
 // 崔单
 export const doReminder = () => instance.get('/doReminder')
 // 退单

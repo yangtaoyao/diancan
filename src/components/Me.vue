@@ -8,7 +8,7 @@
             align-items: center;"
             >
         <div class="" style="margin-right: .8em;">
-          <img  style="width:50px;height:50px;border-radius:50%;" src="https://ws1.sinaimg.cn/large/663d3650gy1fq6824ur1dj20ia0pydlm.jpg">
+          <span class="iconfont icon-touxiangdefault"  style="color:#666666;font-size:32px;width:50px;height:50px;border-radius:50%;"></span>
         </div>
         <div class="weui-media-box__bd" style="flex: 1;">
           昵称：{{loginInfo.nickName}}
@@ -24,7 +24,6 @@
       <cell title="IDcard " :value="loginInfo.iDcard">
       </cell>
     </group>
-    <p>{{loginInfo}}</p>
   
   </div>
 </template>

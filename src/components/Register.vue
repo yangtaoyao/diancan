@@ -96,7 +96,7 @@ export default {
   filter: blur(2px);
 }
 .Login-box /deep/ .weui-tab__panel .weui-cells{
-  margin-top: 50%;
+  margin-top: 150px;
   padding:0 10%;
   background: none
 }

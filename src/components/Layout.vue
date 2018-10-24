@@ -7,9 +7,9 @@
     <span slot="overwrite-left">{{key}}</span>
     </x-header>
     <!-- 数据缓存不刷新 -->
-    <keep-alive>
+    <!-- <keep-alive> -->
       <router-view style="padding-top: 46px" class="main"></router-view>
-    </keep-alive>
+    <!-- </keep-alive> -->
     <tabbar slot="bottom" v-model="indexActive">
       <tabbar-item selected link="/home/menu" @on-item-click="itemClick()">
         <span slot="icon" class="iconfont icon-shouye3" ></span>

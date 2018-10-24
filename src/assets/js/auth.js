@@ -7,10 +7,10 @@ export const setToken = token => Cookies.set(TokenKey, token)
 export const removeToken = () => Cookies.remove(TokenKey)
 
 export const getUserInfo = () => {
-  let UserInfo = Cookies.getJSON('UserInfo')
+  let UserInfo = Cookies.getJSON('UserCusInfo')
   return UserInfo
 }
 export const setUserInfo = UserInfo => {
-  Cookies.set('UserInfo', UserInfo)
+  Cookies.set('UserCusInfo', UserInfo)
 }
-export const removeUserInfo = () => Cookies.remove('UserInfo')
+export const removeUserInfo = () => Cookies.remove('UserCusInfo')

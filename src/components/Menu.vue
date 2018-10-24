@@ -4,11 +4,11 @@
     <div v-transfer-dom>
       <x-dialog v-model="showDetail" class="dialog-demo" :hide-on-blur="true">
         <div class="img-box">
-          <img :src="detailData.Image" style="max-width:100%">
+          <img :src="detailData.imagine" style="max-width:100%">
         </div>
         <div class="weui-media-box__bd" style="flex: 1;">
           
-          <h4 style="color:red"><span>{{detailData.Name}}</span>￥{{detailData.Price}}</h4>
+          <h4 style="color:red"><span>{{detailData.name}}</span>￥{{detailData.price}}</h4>
           <x-number v-model="detailData.num" button-style="round" :min="0" :max="20"></x-number>
         </div>
         <div @click="showDetail=false">
@@ -38,12 +38,12 @@
                     align-items: center;"
                     >
                 <div class="" style="margin-right: .8em;"  @click.stop="show_detail($event,item02)">
-                  <img  style="width:80px;height:80px" :src="item02.Image">
+                  <img  style="width:80px;height:80px" :src="item02.imagine">
                 </div>
                 <div class="weui-media-box__bd" style="flex: 1;">
-                  {{item02.Name}}
-                  <h6 style="color:red">{{item02.Introduction}}</h6>
-                  <h4 style="color:red">￥{{item02.Price}}</h4>
+                  {{item02.dishName}}
+                  <h6 style="color:red">{{item02.introduction}}</h6>
+                  <h4 style="color:red">￥{{item02.price}}</h4>
                   <x-number v-model="item02.num" button-style="round" :min="0" :max="20"></x-number>
                 </div>
               </a>
@@ -65,17 +65,14 @@
       </cell>
     </group>
     <div v-transfer-dom>
-      <popup v-model="showCart" position="bottom" max-height="50%">
+      <popup v-model="showCart" position="bottom" max-height="50%" class="cart-popup">
+        <p @click.stop="clearCart" type="default" style="width:calc(100% - 16px);text-align:right;padding:8px 16px 4px 0;color:#666666">清空</p>
         <group style="padding-bottom:50px">
-          <!-- 清空 -->
-          <cell>
-            <span @click.stop="clearCart" type="default">清空</span>
-          </cell>
           <!-- 已选列表 -->
           <cell v-for="(item,index) in accoutArry" :key="index" :title="index">
             <div slot="icon">
-              <span >{{item.Name}}</span>
-              <span >￥{{item.Price}}</span>
+              <span >{{item.dishName}}</span>
+              <span >￥{{item.price}}</span>
             </div>
             <x-number v-model="item.num" button-style="round" :min="0" :max="20"></x-number>
           </cell>
@@ -144,7 +141,30 @@ export default {
           m[i].list[j].num = 0
         }
       }
+      this.showCart = false
       console.log('clearCart')
+    },
+    async getMenu () {
+      try {
+        const response = await getMenu()
+        console.log(response.data)
+        if (response.data.code === 1) {
+          this.menu = response.data.data
+        } else {
+          this.$vux.toast.show({
+            text: '获取菜单数据失败!',
+            position: 'middle',
+            type: 'cancel'
+          })
+        }
+      } catch (err) {
+        console.error(err)
+        this.$vux.toast.show({
+          text: '获取菜单数据失败,网络错误!',
+          position: 'middle',
+          type: 'cancel'
+        })
+      }
     }
   },
   computed: {
@@ -181,33 +201,14 @@ export default {
       let sum = 0
       if (this.accoutArry === undefined || this.accoutArry.length === 0) { return 0 }
       for (let i = 0, len = this.accoutArry.length; i < len; i++) {
-        sum += parseFloat(this.accoutArry[i].Price) * parseInt(this.accoutArry[i].num)
+        sum += parseFloat(this.accoutArry[i].price) * parseInt(this.accoutArry[i].num)
       }
       console.log('购物车总计' + sum)
       return sum
     }
   },
   created: function () {
-    try {
-      const response = getMenu()
-      console.log(response.data)
-      if (response.data.code === 1) {
-        this.menu = response.data.menuData
-      } else {
-        this.$vux.toast.show({
-          text: '获取菜单数据失败!',
-          position: 'middle',
-          type: 'cancel'
-        })
-      }
-    } catch (err) {
-      console.error(err)
-      this.$vux.toast.show({
-        text: '获取菜单数据失败,网络错误!',
-        position: 'middle',
-        type: 'cancel'
-      })
-    }
+    this.getMenu()
   },
   data () {
     return {
@@ -217,75 +218,22 @@ export default {
       showCart: false, // 打开购物车列表
       indexActive: 0,
       demo2: '包子',
-      menu: [{
-        type: '包子',
-        list: [{
-          Name: '鸡腿包',
-          Price: '3.5',
-          Cuisine: '',
-          Supply: '',
-          Introduction: '鸡腿包',
-          // Image: '../assets/img/yuantiao.jpg',
-          Image: 'https://ws1.sinaimg.cn/large/663d3650gy1fq6824ur1dj20ia0pydlm.jpg',
-          Type: '',
-          num: 2
-        },
+      menu: [
         {
-          Name: '奶黄包',
-          Price: '3',
-          Cuisine: '',
-          Supply: '',
-          Introduction: '鸡腿包',
-          Image: 'https://ws1.sinaimg.cn/large/663d3650gy1fq6824ur1dj20ia0pydlm.jpg',
-          Type: '',
-          num: 0
+          type: '炒饭',
+          list: [{
+            dishName: '黑椒牛柳炒饭',
+            price: '15',
+            cuisine: '',
+            supply: '',
+            introduction: '鸡腿包',
+            imagine: '',
+            type: '',
+            num: 0
+          }]
         }
-        ]
-      },
-      {
-        type: '炒饭',
-        list: [{
-          Name: '黑椒牛柳炒饭',
-          Price: '15',
-          Cuisine: '',
-          Supply: '',
-          Introduction: '鸡腿包',
-          Image: '',
-          Type: '',
-          num: 0
-        },
-        {
-          Name: '虾仁蟹徘炒饭',
-          Price: '13',
-          Cuisine: '',
-          Supply: '',
-          Introduction: '鸡腿包',
-          Image: '',
-          Type: '',
-          num: 0
-        }]
-      }
       ],
-      accout: [{
-        Name: '黑椒牛柳炒饭',
-        Price: '15',
-        Cuisine: '',
-        Supply: '',
-        Introduction: '鸡腿包',
-        Image: '',
-        Type: '',
-        num: 0
-      },
-      {
-        Name: '虾仁蟹徘炒饭',
-        Price: '13',
-        Cuisine: '',
-        Supply: '',
-        Introduction: '鸡腿包',
-        Image: '',
-        Type: '',
-        num: 0
-      }],
+      accout: [],
       detailData: { }
     }
   }
@@ -354,7 +302,7 @@ export default {
    display: block;
  }
 
- /*
+ /*详情弹出框
  */
 .dialog-demo {
   .img-box {
@@ -379,6 +327,13 @@ export default {
   background: #f2f2f2;
 }
 
+// 购物车列表
+.cart-popup.vux-popup-dialog{
+  border-radius: 15px 15px 0 0;
+}
+.cart-popup.vux-popup-dialog /deep/ .weui-cells.vux-no-group-title{
+  margin-top: 0;
+}
 /*
 */
 .cart-box{

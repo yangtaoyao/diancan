@@ -84,7 +84,12 @@ export default {
           })
         }
       } catch (err) {
-        console.error(err)
+        console.log(err)
+        this.$vux.toast.show({
+          text: '网络错误',
+          position: 'middle',
+          type: 'cancel'
+        })
       }
 
       // const thisObj = this

@@ -11,7 +11,7 @@
       <router-view style="padding-top: 46px" class="main"></router-view>
     <!-- </keep-alive> -->
     <tabbar slot="bottom" v-model="indexActive">
-      <tabbar-item selected link="/home/menu" @on-item-click="itemClick()">
+      <tabbar-item selected link="/home/table" @on-item-click="itemClick()">
         <span slot="icon" class="iconfont icon-shouye3" ></span>
         <span slot="icon-active" class="iconfont icon-shouye" ></span>
         <span slot="label">首页</span>

@@ -1,7 +1,8 @@
 import axios from 'axios'
-import store from '../store'
+// import store from '../store'
 import qs from 'qs'
 import common from '../assets/js/common'
+// import _this from '../main'
 
 console.info(common.env)
 
@@ -24,29 +25,32 @@ const instance = axios.create({
 
 // http 请求拦截器
 instance.interceptors.request.use(config => {
-  store.dispatch('updateLoadingStatus', {isLoading: true})
+  // _this.$vux.loading.show({
+  //   text: 'Loading'
+  // })
+  // store.dispatch('updateLoadingStatus', {isLoading: true})
   return config
 }, error => {
-  store.dispatch('updateLoadingStatus', {isLoading: false})
-  this.$vux.toast.show({
-    text: '数据加载超时！',
-    position: 'middle',
-    type: 'cancel'
-  })
+  // _this.$vux.loading.hide()
+  // _this.$vux.toast.show({
+  //   text: '数据加载超时！',
+  //   position: 'middle',
+  //   type: 'cancel'
+  // })
   return Promise.reject(error)
 })
 
 // http 响应拦截器
 instance.interceptors.response.use(response => {
-  store.dispatch('updateLoadingStatus', {isLoading: false})
+  // _this.$vux.loading.hide()
   return response
 }, error => {
-  store.dispatch('updateLoadingStatus', {isLoading: false})
-  this.$vux.toast.show({
-    text: '数据加载失败！',
-    position: 'middle',
-    type: 'cancel'
-  })
+  // _this.$vux.loading.hide()
+  // _this.$vux.toast.show({
+  //   text: '数据加载失败！',
+  //   position: 'middle',
+  //   type: 'cancel'
+  // })
   return Promise.reject(error)
 })
 

@@ -1,5 +1,7 @@
 <template>
   <div class="viewbox">
+    <x-header  slot="header" style="width:100%;left:0;top:0;z-index:100; background:#ffffff;"
+    :left-options="{backText: '菜单'}"></x-header>
     <!--详情弹出框-->
     <div v-transfer-dom>
       <x-dialog v-model="showDetail" class="dialog-demo" :hide-on-blur="true">
@@ -94,7 +96,7 @@
 
 <script>
 import { ViewBox, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, Panel, Card, XNumber, XDialog, XInput, Popup, Group, Cell, Badge,
-TransferDomDirective as TransferDom, Search } from 'vux'
+TransferDomDirective as TransferDom, Search, XHeader } from 'vux'
 // import { hub } from '../assets/js/hub'
 import { getMenu } from '../api/index.js'
 
@@ -104,7 +106,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, ViewBox, Panel, Card, XNumber, XDialog, Search, XInput, Popup, Group, Cell, Badge
+    XHeader, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem, ViewBox, Panel, Card, XNumber, XDialog, Search, XInput, Popup, Group, Cell, Badge
   },
   methods: {
     settlement () {
@@ -116,7 +118,7 @@ export default {
           type: 'cancel'
         })
       } else {
-        this.$router.push({path: '/settlement', query: { orderList: this.accoutArry }})
+        this.$router.push({path: '/settlement', query: { orderList: this.accoutArry, tablenum: this.tablenum }})
       }
     },
     search_onFocus () {
@@ -209,6 +211,7 @@ export default {
   },
   created: function () {
     this.getMenu()
+    this.tablenum = this.$route.query.tablenum
   },
   data () {
     return {
@@ -221,20 +224,13 @@ export default {
       menu: [
         {
           type: '炒饭',
-          list: [{
-            dishName: '黑椒牛柳炒饭',
-            price: '15',
-            cuisine: '',
-            supply: '',
-            introduction: '鸡腿包',
-            imagine: '',
-            type: '',
-            num: 0
-          }]
+          list: []
         }
       ],
       accout: [],
-      detailData: { }
+      detailData: { },
+
+      tablenum: ''
     }
   }
 
@@ -255,9 +251,9 @@ export default {
 //
 .viewbox /deep/ .tab.vux-tab-wrap{
   overflow: hidden;
-  top:91px;
+  top:90px;
   left:0;
-  bottom: 100px;
+  bottom: 50px;
   width: 25%;
   /* height: calc(100% - 46px) ; */
   padding-top: 0px;
@@ -285,9 +281,9 @@ export default {
   width: 75%;
   padding: 0;
   position: fixed;
-  top:91px;
+  top:90px;
   right:0;
-  bottom: 100px;
+  bottom: 50px;
 } 
 .viewbox /deep/ .vux-slider > .vux-swiper{
   height: 100%;
@@ -337,7 +333,7 @@ export default {
 /*
 */
 .cart-box{
-  bottom:50px;
+  bottom:0;
   position:fixed;
   margin-top:0;
   width:100%;

@@ -7,18 +7,21 @@
       <cell :title="'总计金额'" :value="'￥'+accoutNum"></cell>
       <cell-form-preview :list="list"></cell-form-preview>
     </group>
-     <group style="margin-top:10px;">
+    <group>
+      <cell :title="'已选桌位'" :value="tablenum"></cell>
+    </group>
+    <!-- <group style="margin-top:10px;">
       <x-switch v-model="switchShow" @click.native="getTables()" title="选桌位" inline-desc="是否需要预约桌位"></x-switch>
       <cell>
         <span slot="icon" style="color:#666666">
-          <span v-for="item in tablesSetted">{{item.value+', '}}</span>
+          <span v-for="item in tablesSetted">{{item.value}}</span>
         </span>
       </cell>
       <datetime v-model="limitHourValue" format="YYYY-MM-DD HH:mm" :min-hour=9 :max-hour=22
       title="预定桌位时间"
       >
       </datetime>
-    </group>
+    </group> -->
     
     </div>
     <group class="bottom-box">
@@ -34,7 +37,7 @@
         <h4 style="padding-left:16px;color:#333333;padding-top:8px;">桌位状态</h4>
         <group label-width="5em" >
           <cell primary="content">
-            <checker slot="inline-desc" v-model="tablesSetted" type="checkbox" default-item-class="checker-item" selected-item-class="checker-item-selected">
+            <checker slot="inline-desc" v-model="tablesSetted" type="radio" default-item-class="checker-item" selected-item-class="checker-item-selected">
               <checker-item :disabled="false"
                 :value="item" v-for="(item, index) in tablesNoSelected" 
                 :key="index">{{item.value}}
@@ -76,7 +79,15 @@ export default {
   },
   methods: {
     async submit () {
-      if (this.tablesSetted === undefined || this.tablesSetted.length === 0 || this.orderList === undefined || this.orderList.length === 0) {
+      const userinfo = getUserInfo()
+      if (userinfo.cus_userid === undefined || userinfo.cus_userid === null) {
+        this.$vux.toast.show({
+          text: '用户ID为空',
+          position: 'middle',
+          type: 'cancel'
+        })
+        return
+      } else if (this.tablesSetted === undefined || this.tablesSetted === null || this.submitList === undefined || this.submitList.length === 0) {
         this.$vux.toast.show({
           text: '订单列表错误！',
           position: 'middle',
@@ -85,15 +96,15 @@ export default {
         return
       }
       try {
-        const userinfo = getUserInfo()
-        console.log('orderList:' + this.orderList)
-        console.log('limitHourValue:' + this.limitHourValue)
-        console.log('cus_userid:' + JSON.stringify(userinfo))
+        console.log(JSON.stringify(this.submitList))
+        // console.log('limitHourValue:' + this.limitHourValue)
+        // console.log('tablesSetted:' + JSON.stringify(this.tablesSetted))
+        // console.log('cus_userid:' + JSON.stringify(userinfo))
         const response = await submitOrder({
           userId: userinfo.cus_userid,
-          tablenum: this.tablesSetted[0].value,
-          orderList: encodeURI(JSON.stringify(this.orderList)),
-          date: this.limitHourValue
+          tablenum: this.tablenum,
+          orderList: encodeURI(JSON.stringify(this.submitList)),
+          date: '2018-10-26 00:00'
         })
         console.log(response.data)
         if (response.data.code === 1) {
@@ -102,6 +113,8 @@ export default {
             position: 'middle',
             type: 'success'
           })
+          // this.$router.go(-2)
+          this.$router.push('/home')
         } else {
           this.$vux.toast.show({
             text: '提交失败!',
@@ -178,6 +191,16 @@ export default {
       }
       return arr
     },
+    submitList: function () {
+      let arr = []
+      if (this.orderList === undefined || this.orderList.length === 0) { return [] }
+      for (let i = 0, len = this.orderList.length; i < len; i++) {
+        for (let j = 0, len = parseInt(this.orderList[i].num); j < len; j++) {
+          arr.push(this.orderList[i])
+        }
+      }
+      return arr
+    },
     // 可选的空桌
     tablesNoSelected: function () {
       let arr = []
@@ -203,11 +226,13 @@ export default {
       tablesSetted: [],
       show: false, // 显示选桌
       // 获取的
-      tablesGeted: []
+      tablesGeted: [],
+      tablenum: ''
     }
   },
   mounted: function () {
     this.orderList = this.$route.query.orderList
+    this.tablenum = this.$route.query.tablenum
   }
 }
 </script>

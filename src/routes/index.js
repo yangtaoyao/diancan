@@ -9,6 +9,7 @@ import Register from '@/components/Register'
 import SearchP from '@/components/SearchP'
 import Settlement from '@/components/Settlement'
 import OrderDetail from '@/components/OrderDetail'
+import Table from '@/components/Table'
 
 Vue.use(VueRouter)
 
@@ -33,7 +34,11 @@ export const constantRouterMap = [
     name: 'Settlement',
     component: Settlement
   },
-
+  {
+    path: '/menu',
+    name: 'Menu',
+    component: Menu
+  },
   {
     path: '/orderDetail',
     name: 'OrderDetail',
@@ -43,12 +48,12 @@ export const constantRouterMap = [
     path: '/home',
     name: 'layout',
     component: Layout,
-    redirect: '/home/menu',
+    redirect: '/home/table',
     children: [
       {
-        path: 'menu',
+        path: 'table',
         name: '首页',
-        component: Menu
+        component: Table
       },
       {
         path: 'order',

@@ -10,19 +10,18 @@ import { getToken } from './assets/js/auth'
 import './assets/iconfont/iconfont.css'
 import './assets/css/common.css'
 
-// ajax 请求 插件依赖于 axios
-import { AjaxPlugin, ToastPlugin, TransferDom } from 'vux'
-
+import { ToastPlugin, TransferDom, LoadingPlugin } from 'vux'
+// Loading
+Vue.use(LoadingPlugin)
 // toast
 Vue.use(ToastPlugin)
-Vue.use(AjaxPlugin)
 Vue.directive('transfer-dom', TransferDom)
 
 // 不重定向白名单
 const whiteList = ['/login', '/register']
 
 router.beforeEach(async (to, from, next) => {
-  store.dispatch('updateLoadingStatus', {isLoading: true})
+  // store.dispatch('updateLoadingStatus', {isLoading: true})
   if (getToken()) { // 判断是否登录，成功登录
     if (whiteList.indexOf(to.path) !== -1 || to.path === '/') { // 包含白名单
       // console.log('next:/')
@@ -42,14 +41,18 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(() => {
-  store.dispatch('updateLoadingStatus', {isLoading: false})
+  // store.dispatch('updateLoadingStatus', {isLoading: false})
 })
 
 // 移除移动端页面点击延迟
 FastClick.attach(document.body)
 
-Vue.config.productionTip = false
+// window.onbeforeunload = function (event) {
+//   return '您可能有数据没有保存'
+// }
 
+Vue.config.productionTip = false
+// Vue.component('loading', Loading)
 /* eslint-disable no-new */
 new Vue({
   router,

@@ -2,7 +2,7 @@
 const state = {
   loginInfo: {},
   // 页面切换loading
-  isLoading: true,
+  isLoading: false,
   layoutIndex: 0
 }
 

@@ -20,7 +20,7 @@
               <cell>
                 <!-- <x-button  type="default" style="border-color:#000000;background:#ffffff;color:#333333" mini>再来一单</x-button> -->
                 <x-button  type="primary" style="background:#f7ca17;color:#333333" mini>退单</x-button>
-                <!-- <x-button  type="primary" style="background:#f7ca17;color:#333333" mini>催单</x-button> -->
+                <x-button  type="primary" style="background:#f7ca17;color:#333333" mini>催单</x-button>
               </cell>
             </group>
         </div>

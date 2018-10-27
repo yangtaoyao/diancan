@@ -9,8 +9,8 @@
           <img :src="detailData.imagine" style="max-width:100%">
         </div>
         <div class="weui-media-box__bd" style="flex: 1;">
-          
-          <h4 style="color:red"><span>{{detailData.name}}</span>￥{{detailData.price}}</h4>
+          <h4 style="color:red"><span style="color:#333333;font-weight:600">{{detailData.dishName+'  '}}</span>￥{{detailData.price}}</h4>
+          <p>{{detailData.type +"   "+detailData.cuisine}}</p>
           <x-number v-model="detailData.num" button-style="round" :min="0" :max="20"></x-number>
         </div>
         <div @click="showDetail=false">
@@ -62,7 +62,7 @@
           <span  class="iconfont icon-gouwuche"></span>
           <badge :text="cartNum"></badge>
         </div>
-        <span slot="title">&emsp;&emsp;&emsp;总计：￥{{accoutNum}}</span>
+        <span slot="title">&emsp;&emsp;&emsp;总计:￥{{accoutNum}}&emsp;桌号:{{tablenum}}</span>
         <x-button @click.native="settlement()"  type="primary" mini>去结算</x-button>
       </cell>
     </group>
@@ -71,10 +71,10 @@
         <p @click.stop="clearCart" type="default" style="width:calc(100% - 16px);text-align:right;padding:8px 16px 4px 0;color:#666666">清空</p>
         <group style="padding-bottom:50px">
           <!-- 已选列表 -->
-          <cell v-for="(item,index) in accoutArry" :key="index" :title="index">
+          <cell v-for="(item,index) in accoutArry" :key="index" >
             <div slot="icon">
               <span >{{item.dishName}}</span>
-              <span >￥{{item.price}}</span>
+              <span >￥{{parseFloat(item.price) * item.num}}</span>
             </div>
             <x-number v-model="item.num" button-style="round" :min="0" :max="20"></x-number>
           </cell>
@@ -123,7 +123,7 @@ export default {
     },
     search_onFocus () {
       console.log('search_onFocus')
-      this.$router.push('/Search')
+      this.$router.push({path: '/Search', query: { accoutArray: this.accoutArry, tablenum: this.tablenum }})
     },
     show_detail ($event, item02) {
       console.log('show_detail')
@@ -174,9 +174,8 @@ export default {
     accoutArry: function () {
       let arr = []
       let m = this.menu
-      let a = 0
       if (m === [] || m === undefined) { return [] }
-      for (let len = m.length; a < len; a++) {
+      for (let a = 0, len = m.length; a < len; a++) {
         for (let j = 0, len02 = m[a].list.length; j < len02; j++) {
           if (m[a].list[j].num > 0) {
             console.log('accoutArry:')
@@ -209,7 +208,17 @@ export default {
       return sum
     }
   },
-  created: function () {
+  // 监听进入路由，刷新页面
+  // watch: {
+  //   $route (to, from) {
+  //     console.log('watch================' + from.path)
+  //     if (from.path === '/home/table' || from.path === '/home/order') {
+  //       this.getMenu()
+  //       this.tablenum = this.$route.query.tablenum
+  //     }
+  //   }
+  // },
+  activated: function () {
     this.getMenu()
     this.tablenum = this.$route.query.tablenum
   },

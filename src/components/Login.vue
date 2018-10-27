@@ -3,10 +3,10 @@
     <img class="guide-img" src='../assets/img/bg03.jpg'>
     <group>
       <h2 style="color:#ffffff">客户登录</h2>
-      <x-input v-model="form.userID" placeholder="账号" type="number">
+      <x-input v-model="userId" placeholder="账号" type="text">
         <span class="iconfont icon-shoujihaomax" slot="label"  style="padding-right:10px;display:block;" width="24" height="24"></span>
       </x-input>
-      <x-input v-model="form.password" placeholder="密码" type="password">
+      <x-input v-model="password" placeholder="密码" type="password">
         <span class="iconfont icon-mima" slot="label"  style="padding-right:10px;display:block;" width="24" height="24"></span>
       </x-input>
       <br>
@@ -30,10 +30,8 @@ export default {
   data () {
     return {
       showLoading: false,
-      form: {
-        userID: '55160111',
-        password: '55160111'
-      },
+      userId: '',
+      password: '',
       be2333: function (value) {
         return {
           valid: value === '2333',
@@ -49,8 +47,9 @@ export default {
     },
     ...mapActions(['createLoginInfo']),
     async doLogin () {
+      // alert('id:' + this.userId + 'password:' + this.password)
     // doLogin () {
-      if (this.form.userID.trim() === '' || this.form.password.trim() === '') {
+      if (this.userId === '' || this.password === '') {
         this.$vux.toast.show({
           text: '请正确填写用户名和密码！',
           position: 'middle',
@@ -61,8 +60,8 @@ export default {
       try {
         const response = await doLogin({
           userType: 'cus',
-          phoneNum: this.form.userID.trim(),
-          password: this.form.password.trim()
+          phoneNum: this.userId,
+          password: this.password
         })
         console.log(response.data)
         if (response.data.code === 1) {

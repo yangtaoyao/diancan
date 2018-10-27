@@ -13,12 +13,12 @@
     </div>
     <div class="mai-box">
       <h3 style="padding-left:16px;color:#333333;">桌位状态</h3>
-      <group label-width="5em" :title="'桌号'" class="box">
+      <group label-width="5em" :title="'可选桌号'" class="box">
         <cell primary="content">
           <checker slot="inline-desc" v-model="tableSelected" type="radio" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
             <checker-item :disabled="false" @click.prevent.native="itemClick(item)" 
               :value="item" v-for="(item, index) in tablesNoSelected" 
-              :key="index">{{item.value}}
+              :key="index">{{'桌号：'+item.value+'  座位数：'+item.capacity}}
             </checker-item>
           </checker>
         </cell>
@@ -46,7 +46,7 @@ TransferDomDirective as TransferDom, Search, Checker,
     CheckerItem,
     Confirm
      } from 'vux'
-// import { hub } from '../assets/js/hub'
+import { hub } from '../assets/js/hub'
 import { getTables } from '../api/index.js'
 
 export default {
@@ -77,7 +77,15 @@ export default {
 
     },
     gotoMenu () {
-      this.$router.push({path: '/menu', query: {tablenum: this.tableSelected.value}})
+      if (this.tableSelected.value === undefined || this.tableSelected.value === null) {
+        this.$vux.toast.show({
+          text: '桌位还未选！',
+          position: 'middle',
+          type: 'cancel'
+        })
+      } else {
+        this.$router.push({path: '/menu', query: {tablenum: this.tableSelected.value}})
+      }
     },
     show_detail ($event, item02) {
       console.log('show_detail')
@@ -133,6 +141,9 @@ export default {
   },
   created: function () {
     this.getTables()
+    hub.$on('refreshTable', function (data) {
+      console.log('===hub组件通信==' + data)
+    })
   },
   data () {
     return {

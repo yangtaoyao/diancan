@@ -11,7 +11,7 @@
       <router-view style="padding-top: 46px" class="main"></router-view>
     <!-- </keep-alive> -->
     <tabbar slot="bottom" v-model="indexActive">
-      <tabbar-item selected link="/home/table" @on-item-click="itemClick()">
+      <tabbar-item link="/home/table"  @dblclick="refreshTable()">
         <span slot="icon" class="iconfont icon-shouye3" ></span>
         <span slot="icon-active" class="iconfont icon-shouye" ></span>
         <span slot="label">首页</span>
@@ -46,9 +46,8 @@
 
 <script>
 import { XInput, XButton, Group, TransferDom, Popup, XSwitch, XHeader, Tabbar, TabbarItem, ViewBox } from 'vux'
-import { mapGetters, mapActions } from 'vuex'
 import { removeToken, removeUserInfo } from '../assets/js/auth'
-
+import { hub } from '../assets/js/hub'
 export default {
   name: 'Layout',
   directives: {
@@ -66,6 +65,24 @@ export default {
     XButton
   },
   methods: {
+    // 刷新数据
+    refreshTable1 () {
+      this.$vux.toast.show({
+        text: '双击刷新数据',
+        position: 'middle',
+        type: 'text'
+      })
+    },
+    refreshTable () {
+      console.log('==========reflashTable===========')
+      hub.$emit('refreshTable', '这是传递的值')
+      this.$vux.toast.show({
+        text: '正在刷新数据',
+        position: 'middle',
+        type: 'text'
+      })
+      return false
+    },
     clickMore () {
       if (this.show) {
         this.show = false
@@ -79,12 +96,7 @@ export default {
     itemClick: function () {
       console.log(this.indexActive)
       console.log(this.key)
-      // this.updateLayoutIndex({layoutIndex: 2})
-      this.$store.commit('layoutIndex', {layoutIndex: this.indexActive})
     },
-    ...mapActions({
-      updateLayoutIndex: 'updateLayoutIndex'
-    }),
     doLogout () {
       removeToken()
       removeUserInfo()
@@ -97,20 +109,27 @@ export default {
     }
   },
   computed: {
+    // 标题栏
     key () {
       return this.$route.name !== undefined ? this.$route.name : 'view-' + +new Date()
-    },
-    ...mapGetters({
-      layoutIndex: 'layoutIndex'
-    })
+    }
   },
-  created () {
-    // this.indexActive = this.layoutIndex()
+  created: function () {
+    if (this.$route.path === '/home/order') {
+      this.indexActive = 1
+    } else if (this.$route.path === '/home/table') {
+      this.indexActive = 0
+    } else {
+      this.indexActive = 2
+    }
+    // console.log('=========Layout created=========')
+    // console.log(this.$route.path)
     // console.log(this.indexActive)
-    // console.log(this.key)
   },
   data () {
     return {
+      // 双击刷新
+      first: null,
       show: false,
       indexActive: 0
     }

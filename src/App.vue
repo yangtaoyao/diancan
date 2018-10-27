@@ -1,7 +1,10 @@
 <template>
 <!-- <transition name="slide-up"> -->
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
     <div v-transfer-dom>
       <loading v-model="isLoading"></loading>
     </div>

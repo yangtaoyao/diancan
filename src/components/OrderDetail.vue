@@ -4,11 +4,16 @@
     :left-options="{backText: '订单详情'}"></x-header>
     <div class="group-box" style="height: calc(100% - 116px);width:calc(100% - 20px);">
      <group>
-      <cell :title="'菜品列表'"  :value="orderList.ordernum"></cell>
+      <cell :title="'订单号'"  :value="orderList.ordernum"></cell>
       <cell-form-preview :list="list"></cell-form-preview>
     </group>
     <group style="margin-top:10px;">
       <cell title="桌位" :value="tablenum">
+      </cell>
+    </group>
+    <group style="margin-top:0;">
+      <cell title="下单时间">
+        <span style="font-size:14px">{{ordertime}}</span>
       </cell>
     </group>
 
@@ -52,6 +57,9 @@ export default {
     tablenum: function () {
       if (this.orderList.list === undefined || this.orderList.list.length === 0) { return '' }
       return this.orderList.list[0].tableNumber
+    },
+    ordertime: function () {
+      return this.orderList.list[0].ordertime
     }
   },
   data () {

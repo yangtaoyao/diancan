@@ -3,10 +3,10 @@
     <img class="guide-img" src='../assets/img/bg03.jpg'>
     <group>
       <h2 style="color:#ffffff">注册</h2>
-      <x-input v-model="form.nickname" placeholder="用户名" type="number">
+      <x-input v-model="form.nickname" placeholder="昵称" type="text">
         <span class="iconfont icon-tubiao-" slot="label"  style="padding-right:10px;display:block;" width="24" height="24"></span>
       </x-input>
-      <x-input v-model="form.userID" placeholder="账号" type="number">
+      <x-input v-model="form.userID" placeholder="账号id" type="text">
         <span class="iconfont icon-shoujihaomax" slot="label"  style="padding-right:10px;display:block;" width="24" height="24"></span>
       </x-input>
       <x-input v-model="form.password"  placeholder="密码" type="password">
@@ -54,7 +54,7 @@ export default {
       try {
         const response = await doRegister({
           userType: 'cus',
-          nickname: this.form.nickname.trim(),
+          nickname: encodeURI(this.form.nickname.trim()),
           phoneNum: this.form.userID.trim(),
           password: this.form.password.trim()
         })
@@ -68,7 +68,7 @@ export default {
           this.$router.push({ path: '/login' })
         } else {
           this.$vux.toast.show({
-            text: '注册失败!',
+            text: response.data.message,
             position: 'middle',
             type: 'cancel'
           })

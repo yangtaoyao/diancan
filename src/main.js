@@ -1,5 +1,4 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import router from './routes'
@@ -10,7 +9,11 @@ import { getToken } from './assets/js/auth'
 import './assets/iconfont/iconfont.css'
 import './assets/css/common.css'
 
-import { ToastPlugin, TransferDom, LoadingPlugin } from 'vux'
+// 购物车全局变量
+import global_ from './assets/js/Global'
+
+import { ToastPlugin, TransferDom, LoadingPlugin, Loading } from 'vux'
+Vue.prototype.GLOBAL = global_
 // Loading
 Vue.use(LoadingPlugin)
 // toast
@@ -21,7 +24,9 @@ Vue.directive('transfer-dom', TransferDom)
 const whiteList = ['/login', '/register']
 
 router.beforeEach(async (to, from, next) => {
-  // store.dispatch('updateLoadingStatus', {isLoading: true})
+  // router.app.$vux.loading.show({
+  //   text: '加载中...'
+  // })
   if (getToken()) { // 判断是否登录，成功登录
     if (whiteList.indexOf(to.path) !== -1 || to.path === '/') { // 包含白名单
       // console.log('next:/')
@@ -41,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(() => {
-  // store.dispatch('updateLoadingStatus', {isLoading: false})
+  // router.app.$vux.loading.hide()
 })
 
 // 移除移动端页面点击延迟
@@ -52,9 +57,9 @@ FastClick.attach(document.body)
 // }
 
 Vue.config.productionTip = false
-// Vue.component('loading', Loading)
+Vue.component('loading', Loading)
 /* eslint-disable no-new */
-new Vue({
+export const _this = new Vue({
   router,
   render: h => h(App),
   store

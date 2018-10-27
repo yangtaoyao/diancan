@@ -103,8 +103,7 @@ export default {
         const response = await submitOrder({
           userId: userinfo.cus_userid,
           tablenum: this.tablenum,
-          orderList: encodeURI(JSON.stringify(this.submitList)),
-          date: '2018-10-26 00:00'
+          orderList: encodeURI(JSON.stringify(this.submitList))
         })
         console.log(response.data)
         if (response.data.code === 1) {

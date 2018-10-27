@@ -2,7 +2,7 @@ import axios from 'axios'
 // import store from '../store'
 import qs from 'qs'
 import common from '../assets/js/common'
-// import _this from '../main'
+import {_this} from '../main'
 
 console.info(common.env)
 
@@ -25,32 +25,31 @@ const instance = axios.create({
 
 // http 请求拦截器
 instance.interceptors.request.use(config => {
-  // _this.$vux.loading.show({
-  //   text: 'Loading'
-  // })
-  // store.dispatch('updateLoadingStatus', {isLoading: true})
+  _this.$vux.loading.show({
+    text: '客官请稍后...'
+  })
   return config
 }, error => {
-  // _this.$vux.loading.hide()
-  // _this.$vux.toast.show({
-  //   text: '数据加载超时！',
-  //   position: 'middle',
-  //   type: 'cancel'
-  // })
+  _this.$vux.loading.hide()
+  _this.$vux.toast.show({
+    text: '数据加载超时！',
+    position: 'middle',
+    type: 'cancel'
+  })
   return Promise.reject(error)
 })
 
 // http 响应拦截器
 instance.interceptors.response.use(response => {
-  // _this.$vux.loading.hide()
+  _this.$vux.loading.hide()
   return response
 }, error => {
-  // _this.$vux.loading.hide()
-  // _this.$vux.toast.show({
-  //   text: '数据加载失败！',
-  //   position: 'middle',
-  //   type: 'cancel'
-  // })
+  _this.$vux.loading.hide()
+  _this.$vux.toast.show({
+    text: '数据加载失败！',
+    position: 'middle',
+    type: 'cancel'
+  })
   return Promise.reject(error)
 })
 
@@ -72,6 +71,8 @@ export const submitOrder = params => instance.post('/submitOrder', params)
 // 获取订单列表
 export const getOrder = params => instance.post('/getOrder', params)
 // 崔单
-export const doReminder = () => instance.get('/doReminder')
+export const doReminder = params => instance.post('/doReminder', params)
 // 退单
-export const doChargeBack = () => instance.get('/doChargeBack')
+export const doChargeBack = params => instance.post('/doChargeBack', params)
+// 搜索
+export const doSearch = params => instance.post('/doSearch', params)

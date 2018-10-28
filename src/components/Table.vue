@@ -84,7 +84,7 @@ export default {
           type: 'cancel'
         })
       } else {
-        this.$router.push({path: '/menu', query: {tablenum: this.tableSelected.value}})
+        this.$router.push({path: '/menu', query: {tablenum: this.tableSelected.value, refresh: true}})
       }
     },
     show_detail ($event, item02) {

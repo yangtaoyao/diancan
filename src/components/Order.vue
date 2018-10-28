@@ -19,16 +19,16 @@
                 <span slot="after-title" style="color:#666666">{{item.list.length}}件菜品</span>
               </cell>
               <cell>
-                <x-button v-if="item.list[0].judge===0||item.list[0].judge===2?true:false"  @click.native="goMenu(item)"  type="default" style="border-color:#000000;background:#ffffff;color:#333333" mini>加菜</x-button>
-                <x-button v-if="item.list[0].judge===0||item.list[0].judge===2?true:false" @click.native="itemClick (item)"   type="primary" style="background:#f7ca17;color:#333333" mini>退单</x-button>
-                <x-button v-if="item.list[0].judge===0?true:false" @click.native="remindClick (item)" type="primary" style="background:#f7ca17;color:#333333" mini>催单</x-button>
+                <x-button v-if="item.list[0].judge===0||item.list[0].judge===2"  @click.native="goMenu(item)"  type="default" style="border-color:#000000;background:#ffffff;color:#333333" mini>加菜</x-button>
+                <x-button v-if="item.list[0].judge===0||item.list[0].judge===2" @click.native="itemClick (item)"   type="primary" style="background:#f7ca17;color:#333333" mini>退单</x-button>
+                <x-button v-if="item.list[0].judge===0" @click.native="remindClick (item)" type="primary" style="background:#f7ca17;color:#333333" mini>催单</x-button>
               </cell>
             </group>
         </div>
       </swiper-item>
       <swiper-item>
         <div style="height:auto;top:0">
-          <!-- 已完成列表 -->
+          <!-- 已上菜列表 -->
           <p v-if="(finishList===undefined||finishList.length===0)" style="width:100%;text-align:center;padding-top:120px">暂无数据</p>
             <group v-for="item in finishList" :key="item.ordernum" class="card">
               <cell :title="'订单 '+item.ordernum" value="" is-link @click.native="gotoDetail(item)">{{item|getorderState}}</cell>
@@ -39,14 +39,14 @@
                 <span slot="after-title" style="color:#666666">{{item.list.length}}件菜品</span>
               </cell>
               <cell>
-                <x-button v-if="item.list[0].judge===0?true:false"  @click.native="goMenu(item)"  type="default" style="border-color:#000000;background:#ffffff;color:#333333" mini>加菜</x-button>
+                <x-button  @click.native="goMenu(item)"  type="default" style="border-color:#000000;background:#ffffff;color:#333333" mini>加菜</x-button>
              </cell>
             </group>
         </div>
       </swiper-item>
       <swiper-item>
         <div style="height:auto;top:0">
-          <!-- 已退单列表 -->
+          <!-- 退单列表 -->
           <p v-if="(chargebackList===undefined||chargebackList.length===0)" style="width:100%;text-align:center;padding-top:120px">暂无数据</p>
             <group v-for="item in chargebackList" :key="item.ordernum" class="card">
               <cell :title="'订单 '+item.ordernum" value="" is-link @click.native="gotoDetail(item)">{{item|getorderState}}</cell>
@@ -108,6 +108,8 @@ export default {
       if (item.list[0].judge === 1) {
         return '已完成'
       } else if (item.list[0].judge === 3) {
+        return '退单待处理'
+      } else if (item.list[0].judge === 4) {
         return '已退单'
       } else {
         return '正在进行'
@@ -128,13 +130,13 @@ export default {
       console.log('已退单页面数组' + JSON.stringify(arr))
       return arr
     },
-    // 已退单页面
+    // 退单页面
     chargebackList: function () {
       let arr = []
       let ol = this.orderList
       if (this.orderList === undefined || this.orderList.length === 0) { return [] }
       for (let i = 0, len = ol.length; i < len; i++) {
-        if (ol[i].list[0].judge === 3) {
+        if (ol[i].list[0].judge === 3 || ol[i].list[0].judge === 4) {
           arr.push(ol[i])
         }
       }

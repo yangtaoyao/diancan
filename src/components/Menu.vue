@@ -11,6 +11,7 @@
         <div class="weui-media-box__bd" style="flex: 1;">
           <h4 style="color:red"><span style="color:#333333;font-weight:600">{{detailData.dishName+'  '}}</span>￥{{detailData.price}}</h4>
           <p>{{detailData.type +"   "+detailData.cuisine}}</p>
+          <p>简介：{{detailData.introduction===null?'还没有简介呢~':detailData.introduction}}</p>
           <x-number v-model="detailData.num" button-style="round" :min="0" :max="20"></x-number>
         </div>
         <div @click="showDetail=false">
@@ -212,7 +213,8 @@ export default {
   // watch: {
   //   $route (to, from) {
   //     console.log('watch================' + from.path)
-  //     if (from.path === '/home/table' || from.path === '/home/order') {
+  //     if ((from.path === '/home/table' || from.path === '/home/order') && to.path === '/menu') {
+  //       console.log('getMenu================')
   //       this.getMenu()
   //       this.tablenum = this.$route.query.tablenum
   //     }
@@ -311,7 +313,7 @@ export default {
  */
 .dialog-demo {
   .img-box {
-    height: 350px;
+    height: auto;
     overflow: hidden;
   }
   .number-box{

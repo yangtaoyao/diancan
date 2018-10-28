@@ -30,8 +30,8 @@ export default {
   data () {
     return {
       showLoading: false,
-      userId: '',
-      password: '',
+      userId: '55160111',
+      password: '55160111',
       be2333: function (value) {
         return {
           valid: value === '2333',

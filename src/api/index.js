@@ -1,14 +1,12 @@
 import axios from 'axios'
 // import store from '../store'
 import qs from 'qs'
-import common from '../assets/js/common'
+import {baseUrl} from '../assets/js/baseUrl'
 import {_this} from '../main'
 
-console.info(common.env)
-
 const instance = axios.create({
-  baseURL: common.serverUrl,
-  timeout: 4000,
+  baseURL: baseUrl,
+  timeout: 20000,
     // withCredentials: true, // 跨域请求时是否需要使用凭证
   paramsSerializer: params => {
         // 序列化 GET 请求参数 -> a: [1, 2] => a=1&a=2
